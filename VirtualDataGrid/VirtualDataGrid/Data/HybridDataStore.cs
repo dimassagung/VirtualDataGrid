@@ -203,7 +203,7 @@ namespace VirtualDataGrid.Data
             finally { _lock.ExitReadLock(); }
         }
 
-        // ✅ HIGH-PERFORMANCE (untuk advanced use)
+        //HIGH-PERFORMANCE (untuk advanced use)
         public ReadOnlySpan<InternalRow> GetLiveSpan(out IDisposable lockToken)
         {
             _lock.EnterReadLock();

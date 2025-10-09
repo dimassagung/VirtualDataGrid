@@ -333,11 +333,33 @@ namespace VirtualDataGrid.Controls
             var typedData = newSource.Cast<object>().ToList();
             TotalRowCount = typedData.Count;
 
+            //var bindings = Columns.Select(c => c.BindingPath).ToArray();
+            //// Build converter (object-based via reflection)
+            //_converter?.Dispose();
+            //_converter = new DataConverter<object>(bindings);
+
             //_pipeline.PushData(typedData, _converter);
 
             UpdateTotalHeight();
         }
 
+        private void UpdateConverter()
+        {
+            //// ✅ PRIORITAS: Columns > BindingPaths
+            //if (Columns?.Any() == true)
+            //{
+            //    _converter = new DataConverter(Columns);
+            //}
+            //else if (BindingPaths?.Any() == true)
+            //{
+            //    _converter = new DataConverter(BindingPaths);
+            //}
+            //else
+            //{
+            //    // Fallback: auto-detect dari data nanti
+            //    _converter = new DataConverter(Array.Empty<string>());
+            //}
+        }
         private void OnColumnsChanged(ColumnCollection oldColumns, ColumnCollection newColumns)
         {
             if (oldColumns != null)

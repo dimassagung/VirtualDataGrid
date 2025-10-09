@@ -11,6 +11,19 @@ using VirtualDataGrid.Core;
 
 namespace VirtualDataGrid.Data
 {
+   // Entity(Order/Trade/Stock)
+   //     │
+   //     ▼
+   //DataConverter
+   //     │ (compile accessor)
+   //     ▼
+   //InternalRow
+   //     │
+   //     └─ Cells[] : CellValue[]
+   //            │
+   //            ├─ double (NumericValue)
+   //            ├─ int (StringId) → StringPool untuk text
+   //            └─ bool (BoolValue)
 
     /// <summary>
     /// Converter generic dari entity T -> InternalRow
@@ -20,22 +33,36 @@ namespace VirtualDataGrid.Data
     /// </summary>
     public sealed class DataConverter<T> : IDisposable where T : class
     {
-        private readonly Func<T, object?>[] _getters;
+        private readonly Func<T, object?>[] _propertyGetters;
         private readonly string[] _bindingPaths;
         private readonly ArrayPool<CellValue> _pool = ArrayPool<CellValue>.Shared;
         private readonly int _columnCount;
+        private readonly StringPool? _stringPool;
         private bool _disposed;
-
+        private readonly ColumnCollection _columns;
+        //public DataConverter(ColumnCollection columns)
+        //{
+        //    _columnMap = new ColumnMap(columns.Select(c => c.BindingPath).ToArray());
+        //}
         public DataConverter(ColumnCollection columns)
+        //public DataConverter(ColumnCollection columns)
         {
+            if (columns == null || columns.Count == 0)
+                throw new ArgumentException("Columns cannot be null or empty");
 
+            _columns = columns;
+            _columnCount = _columns.Count;
+            _propertyGetters = new Func<T, object?>[_columnCount];
+          
+            PrecompileGetters();
         }
+
         public DataConverter(IEnumerable<string> bindingPaths)
         {
             _bindingPaths = bindingPaths?.ToArray() ?? throw new ArgumentNullException(nameof(bindingPaths));
             _columnCount = _bindingPaths.Length;
             if (_columnCount == 0) throw new ArgumentException("bindingPaths must contain at least one entry");
-            _getters = new Func<T, object?>[_columnCount];
+            _propertyGetters = new Func<T, object?>[_columnCount];
 
             PrecompileGetters();
         }
@@ -44,7 +71,7 @@ namespace VirtualDataGrid.Data
         {
             for (int i = 0; i < _columnCount; i++)
             {
-                _getters[i] = CompileGetter(_bindingPaths[i]);
+                _propertyGetters[i] = CompileGetter(_bindingPaths[i]);
             }
         }
 
@@ -105,7 +132,7 @@ namespace VirtualDataGrid.Data
             for (int c = 0; c < _columnCount; c++)
             {
                 object? raw = null;
-                try { raw = _getters[c](entity); }
+                try { raw = _propertyGetters[c](entity); }
                 catch { raw = null; }
 
                 buffer[c] = ConvertToCellValue(raw);
