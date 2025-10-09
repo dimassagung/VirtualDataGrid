@@ -48,7 +48,8 @@ namespace VirtualDataGrid.Data
         //public DataConverter(ColumnCollection columns)
         {
             if (columns == null || columns.Count == 0)
-                throw new ArgumentException("Columns cannot be null or empty");
+                return;
+                //throw new ArgumentException("Columns cannot be null or empty");
 
             _columns = columns;
             _columnCount = _columns.Count;
@@ -57,15 +58,15 @@ namespace VirtualDataGrid.Data
             PrecompileGetters();
         }
 
-        public DataConverter(IEnumerable<string> bindingPaths)
-        {
-            _bindingPaths = bindingPaths?.ToArray() ?? throw new ArgumentNullException(nameof(bindingPaths));
-            _columnCount = _bindingPaths.Length;
-            if (_columnCount == 0) throw new ArgumentException("bindingPaths must contain at least one entry");
-            _propertyGetters = new Func<T, object?>[_columnCount];
+        //public DataConverter(IEnumerable<string> bindingPaths)
+        //{
+        //    _bindingPaths = bindingPaths?.ToArray() ?? throw new ArgumentNullException(nameof(bindingPaths));
+        //    _columnCount = _bindingPaths.Length;
+        //    if (_columnCount == 0) throw new ArgumentException("bindingPaths must contain at least one entry");
+        //    _propertyGetters = new Func<T, object?>[_columnCount];
 
-            PrecompileGetters();
-        }
+        //    PrecompileGetters();
+        //}
 
         private void PrecompileGetters()
         {

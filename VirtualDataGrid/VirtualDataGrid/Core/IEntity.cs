@@ -12,7 +12,7 @@ namespace VirtualDataGrid.Core
     /// </summary>
     public interface IEntity
     {
-        int Id { get; }
-        int RowVersion { get; }
+        int Id { get; set; }
+        long RowVersion { get; set; }
     }
 }

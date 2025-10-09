@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using VirtualDataGrid.Core;
 using VirtualDataGrid.Data;
+using VirtualDataGrid.Managers;
 
 namespace VirtualDataGrid.Controls
 {
@@ -82,12 +85,13 @@ namespace VirtualDataGrid.Controls
         #endregion Dependency Properties
 
         #region Internal Components
-        //private readonly UltraCrudPipeline<object> _pipeline;
+        private readonly BackgroundProcessor<object> _backgroundProcessor;
+        private readonly UltraCrudPipeline<object> _pipeline;
         private readonly DataConverter<object> _converter;
         //private readonly VirtualizedRenderer _renderer;
 
-        //private readonly SelectionManager _selectionManager;
-        //public SelectionManager SelectionManager => _selectionManager;
+        private readonly SelectionManager _selectionManager;
+        public SelectionManager SelectionManager => _selectionManager;
 
         //private readonly InteractionManager _interactionManager;
         //private readonly FilterSortManager _filterSortManager;
@@ -214,8 +218,9 @@ namespace VirtualDataGrid.Controls
             //_performanceMonitor = new PerformanceMonitor();
 
             //// Initialize pipeline and renderer
-            ////_converter = new DataConverter<object>(new ColumnCollection<object>());
-            ////_pipeline = new UltraCrudPipeline<object>(new ColumnCollection<object>(), Dispatcher);
+            _converter = new DataConverter<object>(Columns);
+            _pipeline = new UltraCrudPipeline<object>(new ColumnCollection());
+            _backgroundProcessor = new BackgroundProcessor<object>(Columns, _pipeline);
             //_renderer = new VirtualizedRenderer();
 
             //// Subscribe to events
@@ -333,14 +338,39 @@ namespace VirtualDataGrid.Controls
             var typedData = newSource.Cast<object>().ToList();
             TotalRowCount = typedData.Count;
 
-            //var bindings = Columns.Select(c => c.BindingPath).ToArray();
+            var bindings = Columns.Select(c => c.BindingPath).ToArray();
             //// Build converter (object-based via reflection)
             //_converter?.Dispose();
-            //_converter = new DataConverter<object>(bindings);
-
+            // _converter = new DataConverter<object>(bindings);
+           // var internalData = _converter.ConvertToInternal(newSource, Columns);
+            //_pipeline.PushData(internalData);
             //_pipeline.PushData(typedData, _converter);
 
             UpdateTotalHeight();
+
+            // Unsubscribe from old collection if it's observable
+            if (oldSource is INotifyCollectionChanged oldCollection)
+                oldCollection.CollectionChanged -= OnCollectionChanged;
+
+            // Subscribe to new collection
+            if (newSource is INotifyCollectionChanged newCollection)
+                newCollection.CollectionChanged += OnCollectionChanged;
+
+        }
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Translate collection changes to DataUpdate batches
+            // This is a simplified example; need to handle Add, Remove, Replace, Reset
+            if (e.NewItems != null)
+            {
+                foreach (var newItem in e.NewItems)
+                {
+                    //// Convert newItem to DataRow and push update
+                    //var row = ConvertToDataRow(newItem);
+                    //_pipeline.PushUpdate(new DataUpdate { Type = UpdateType.Add, RowData = row });
+                }
+            }
+            // ... similar for other change types
         }
 
         private void UpdateConverter()
