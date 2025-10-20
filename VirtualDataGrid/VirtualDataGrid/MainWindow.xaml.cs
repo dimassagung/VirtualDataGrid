@@ -57,8 +57,8 @@ namespace VirtualGridDemo
             columns.Add(new VirtualDataGridColumn("hCategory", "Category"));
 
             VirtualDataGrid.Controls.VirtualDataGrid _grid = new VirtualDataGrid.Controls.VirtualDataGrid();
-            _grid.Columns = columns;
             _grid.ItemsSource = Items;
+            _grid.Columns = columns;
         }
         public class DemoEntity
         {

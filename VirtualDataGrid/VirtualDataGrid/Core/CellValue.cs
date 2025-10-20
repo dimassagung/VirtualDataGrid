@@ -31,7 +31,7 @@ namespace VirtualDataGrid.Core
         public static readonly CellValue Empty = new();
 
 
-        // ---- Constructors ----
+        // Constructor untuk setiap jenis data
         public CellValue(double numeric) { this = default; NumericValue = numeric; IsNumeric = true; }
         public CellValue(bool b) { this = default; BoolValue = b; IsBool = true; }
         public CellValue(DateTime dt) { this = default; DateValue = dt; IsDate = true; }
@@ -39,6 +39,7 @@ namespace VirtualDataGrid.Core
         public CellValue(object custom) { this = default; _ref = custom; }
 
         // ---- Factory helpers ----
+        // Methods untuk ambil nilai (dengan type safety)
         public static CellValue FromDouble(double d) => new(d);
         public static CellValue FromBool(bool b) => new(b);
         public static CellValue FromString(string s, StringPool pool) => new(pool.GetId(s));

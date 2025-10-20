@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using VirtualDataGrid.Controls;
 using VirtualDataGrid.Core;
 
 namespace VirtualDataGrid.Data

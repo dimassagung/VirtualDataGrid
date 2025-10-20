@@ -43,6 +43,5 @@ namespace VirtualDataGrid.Core
 
         public bool IsSummary { get; set; } = false;
         public SummaryType SummaryType { get; set; } = SummaryType.None;
-
     }
 }

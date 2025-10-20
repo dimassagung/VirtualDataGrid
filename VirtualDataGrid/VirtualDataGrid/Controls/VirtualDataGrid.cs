@@ -33,9 +33,14 @@ namespace VirtualDataGrid.Controls
             DependencyProperty.Register(nameof(Columns), typeof(ColumnCollection), typeof(VirtualDataGrid),
                 new FrameworkPropertyMetadata(new ColumnCollection(), OnColumnsChanged));
 
+        public static readonly DependencyProperty AutoGenerateColumnsProperty =
+            DependencyProperty.Register(nameof(AutoGenerateColumns), typeof(bool), typeof(VirtualDataGrid),
+                new PropertyMetadata(true));
+
+
         public static readonly DependencyProperty SelectedItemProperty =
-         DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(VirtualDataGrid),
-         new FrameworkPropertyMetadata(null, OnSelectedItemChanged));
+            DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(VirtualDataGrid),
+                new FrameworkPropertyMetadata(null, OnSelectedItemChanged));
 
         public static readonly DependencyProperty SelectedItemsProperty =
        DependencyProperty.Register(nameof(SelectedItems), typeof(IList), typeof(VirtualDataGrid),
@@ -52,7 +57,6 @@ namespace VirtualDataGrid.Controls
         public static readonly DependencyProperty RowHeightProperty =
             DependencyProperty.Register(nameof(RowHeight), typeof(double), typeof(VirtualDataGrid),
                 new FrameworkPropertyMetadata(25.0));
-        //  new FrameworkPropertyMetadata(VirtualGridConfig.DefaultRowHeight));
 
         public static readonly DependencyProperty FrozenColumnCountProperty =
             DependencyProperty.Register(nameof(FrozenColumnCount), typeof(int), typeof(VirtualDataGrid),
@@ -65,6 +69,7 @@ namespace VirtualDataGrid.Controls
         public static readonly DependencyProperty AlternationCountProperty =
             DependencyProperty.Register(nameof(AlternationCount), typeof(int), typeof(VirtualDataGrid),
                 new FrameworkPropertyMetadata(2));
+
         public static readonly DependencyProperty ThemeProperty =
             DependencyProperty.Register(nameof(Theme), typeof(string), typeof(VirtualDataGrid),
                 new FrameworkPropertyMetadata("Light", OnThemeChanged));
@@ -117,6 +122,12 @@ namespace VirtualDataGrid.Controls
         {
             get => (ColumnCollection)GetValue(ColumnsProperty);
             set => SetValue(ColumnsProperty, value);
+        }
+
+        public bool AutoGenerateColumns
+        {
+            get => (bool)GetValue(AutoGenerateColumnsProperty);
+            set => SetValue(AutoGenerateColumnsProperty, value);
         }
 
         public object SelectedItem
@@ -263,7 +274,7 @@ namespace VirtualDataGrid.Controls
 
             if (_scrollViewer != null)
             {
-                _scrollViewer.ScrollChanged += OnScrollChanged;
+              //  _scrollViewer.ScrollChanged += OnScrollChanged;
             }
 
             if (_headerPanel != null)

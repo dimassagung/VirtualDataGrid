@@ -8,6 +8,20 @@ using System.Windows.Input;
 
 namespace VirtualDataGrid.Managers
 {
+    /// <summary>
+    /// InteractionManager
+    /// -------------------
+    /// - Menangani semua interaksi UI (mouse dan keyboard).
+    /// - Menjadi penghubung antara input user ↔ logika internal grid.
+    /// - Menginformasikan ke: ColumnManager, ScrollManager, SelectionManager, dan Renderer.
+    /// 
+    /// Contoh event:
+    ///   - Klik kiri: pilih cell/row.
+    ///   - Drag header: pindahkan kolom.
+    ///   - Hover cell: highlight cell.
+    ///   - Scroll wheel: ubah viewport.
+    ///   - Keyboard: navigasi / shortcut.
+    /// </summary>
     public class InteractionManager
     {
         private readonly Controls.VirtualDataGrid _grid;

@@ -9,5 +9,20 @@
     <Grid>
         <Button Content="Button" Click="Button_Click" HorizontalAlignment="Left" Margin="98,106,0,0" VerticalAlignment="Top"/>
 
+        <!--<local:VirtualDataGrid ItemsSource="{Binding Orders}" 
+                       SelectionMode="Extended"
+                       Theme="Dark"
+                       RowDoubleClick="OnRowDoubleClick">
+            <local:VirtualDataGrid.Columns>
+                <local:VirtualDataGridColumn Header="Id" Binding="Id" Width="60"/>
+                <local:VirtualDataGridColumn Header="Name" Binding="Name" Width="200"/>
+                <local:VirtualDataGridColumn Header="Active" Binding="IsActive" 
+                                     CellType="Checkbox" Width="80"/>
+                <local:VirtualDataGridColumn Header="Action" CellType="Button" 
+                                     ButtonText="Edit" Width="100"/>
+            </local:VirtualDataGrid.Columns>
+        </local:VirtualDataGrid>-->
+
+        
     </Grid>
 </Window>

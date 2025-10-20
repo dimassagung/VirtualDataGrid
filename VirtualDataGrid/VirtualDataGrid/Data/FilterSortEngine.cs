@@ -162,3 +162,16 @@ namespace VirtualDataGrid.Data
         #endregion
     }
 }
+
+//// Ambil manager dari grid
+//var filterManager = theGrid.FilterSortManager;
+
+//// Tambah filter
+//filterManager.SetFilter("Volume", value =>
+//{
+//    if (value is double d) return d > 1000;
+//    return false;
+//});
+
+//// Jalankan ulang filter
+//filterManager.ApplyFilters();
